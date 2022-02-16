@@ -15,4 +15,6 @@ public interface UserService {
     void deleteById(String id) throws UserException;
 
     User update(UserDto userDto, String userId) throws UserException;
+
+    User findByEmail(String email) throws UserException;
 }

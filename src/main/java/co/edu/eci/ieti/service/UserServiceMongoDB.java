@@ -1,6 +1,9 @@
 package co.edu.eci.ieti.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +17,8 @@ import co.edu.eci.ieti.repository.UserRepository;
 public class UserServiceMongoDB implements UserService {
 
     private final UserRepository userRepository;
+    private static final DateTimeFormatter date = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
 
     public UserServiceMongoDB(@Autowired UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -21,11 +26,14 @@ public class UserServiceMongoDB implements UserService {
 
     @Override
     public User create(User user) throws UserException {
-        if (userRepository.existsById(user.getId())) {
-            throw new UserException(UserException.USER_CREATE_EXCEPTION);
-        } else {
-            return userRepository.save(user);
+        User userTst = null;
+        try {
+            userTst = findByEmail(user.getEmail());
+        }catch (UserException e){
+                user.setCreatedAt(dateToString());
+                return userRepository.save(user);
         }
+        throw new UserException(UserException.USER_CREATE_EXCEPTION);
     }
 
     @Override
@@ -69,5 +77,27 @@ public class UserServiceMongoDB implements UserService {
 
         return actualUser;
     }
+
+    @Override
+    public User findByEmail(String email) throws UserException {
+        List<User> users = userRepository.findAll();
+        User userFinded = null;
+        for (User user: users){
+            if(user.getEmail().equals(email)){
+                userFinded = user;
+                break;
+            }
+        }
+        if (userFinded == null) {
+            throw new UserException(UserException.USER_DOESNOT_EXIST);
+        }else {
+            return userFinded;
+        }
+    }
+
+    private String dateToString() {
+        return date.format(LocalDateTime.now()).toString();
+    }
+
 
 }

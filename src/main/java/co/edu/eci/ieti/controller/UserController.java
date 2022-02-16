@@ -46,7 +46,7 @@ public class UserController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(userService.create(new User(userDto)));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body( null);
         }
     }
 

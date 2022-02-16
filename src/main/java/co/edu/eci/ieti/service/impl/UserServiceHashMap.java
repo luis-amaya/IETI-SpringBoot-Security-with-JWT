@@ -72,8 +72,14 @@ public class UserServiceHashMap implements UserService {
 
     }
 
+    @Override
+    public User findByEmail(String email) throws UserException {
+        return null;
+    }
+
     private String dateToString() {
         return date.format(LocalDateTime.now()).toString();
     }
+
 
 }
