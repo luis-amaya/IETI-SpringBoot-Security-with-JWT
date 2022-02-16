@@ -39,7 +39,8 @@ public class AuthController {
     @PostMapping
     public TokenDto login(@RequestBody LoginDto loginDto) throws UserException {
         User user = userService.findByEmail( loginDto.getEmail());
-        if (BCrypt.checkpw(loginDto.getPassword(), user.getPasswordHash())){
+        boolean works = BCrypt.checkpw(loginDto.getPassword(), user.getPasswordHash());
+        if (works){
             return generateTokenDto (user);
         }
         else {
