@@ -1,4 +1,5 @@
 co\edu\eci\ieti\RestApiApplication.class
+co\edu\eci\ieti\config\SecurtyConfiguration.class
 co\edu\eci\ieti\service\UserService.class
 co\edu\eci\ieti\exceptions\UserException.class
 co\edu\eci\ieti\data\User.class
